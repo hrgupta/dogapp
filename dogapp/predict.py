@@ -52,7 +52,7 @@ def predict(url, data, model):
 
     #url = [sample['url'] for sample in inputs]
 
-    with open(os.path.join(os.getcwd(), 'dogapp\dog_names.txt')) as f:
+    with open(os.path.join(os.getcwd(), 'dogapp/dog_names.txt')) as f:
         dog_names = f.read().splitlines()
 
     # Predict
