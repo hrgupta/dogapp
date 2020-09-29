@@ -1,1 +1,1 @@
-web: sh setup.sh && streamlit run dogapp/dog.py
+web: sh setup.sh && streamlit run dog.py
