@@ -6,7 +6,6 @@ import json
 import urllib.request
 import numpy as np
 
-from sklearn.preprocessing import LabelEncoder
 from tensorflow.keras.preprocessing.text import tokenizer_from_json
 from io import BytesIO
 from tensorflow.keras.preprocessing import image
