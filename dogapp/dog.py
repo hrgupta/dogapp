@@ -38,7 +38,6 @@ st.write("**Predicted breed**:", preprocessed_text)
 
 st.info("""⚠️This app uses a **Small** web server. Too many request to it can **Overwhelm** it. In that case it will **Restart**. Please allow it to restart to make any further requests.✨""")
 
-
 # Warning
 #st.info("""⚠️The model architecture used in this demo is **not state-of-the-art** and it's not **fully optimized**, as this was not the main focus of the lesson.
 #        Also keep in mind that the **dataset** is dated and **limited** to particular vocabulary.
