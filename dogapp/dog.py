@@ -36,7 +36,12 @@ st.write("**Input url**:", raw_text)
 preprocessed_text = results[0]['class']
 st.write("**Predicted breed**:", preprocessed_text)
 
+<<<<<<< HEAD
 st.info("""⚠️This app uses a **Small** web server. Too many request to it can **Overwhelm** it. In that case it will **Restart**. Please allow it to restart to make any further requests.✨""")
+=======
+st.info("""⚠ This app uses a **Small** Web Server. Too many requests to it can **Overwhelm** it. In that case, it will **Restart**.
+            Please allow it to restart to make any further requests. ✨""")
+>>>>>>> add restart script and warning on main app
 
 
 # Warning
