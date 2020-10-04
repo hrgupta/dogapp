@@ -1,19 +1,7 @@
 #!/bin/bash
-<<<<<<< HEAD
-<<<<<<< HEAD
 # starts the traffic app and restarts it if crashed
 
 while true; do
     [ -e stopme ] && break
     streamlit run dogapp/dog.py --server.enableCORS False --server.port 8502
-=======
-while true; do
-	[-e stopme] && break
-	streamlit run dogapp/dog.py --server.enableCORS False --server.port 8502
->>>>>>> add restart script and warning on main app
-=======
-while true; do
-	[-e stopme] && break
-	streamlit run dogapp/dog.py --server.enableCORS False --server.port 8502
->>>>>>> merge commit
 done
