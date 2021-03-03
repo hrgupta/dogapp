@@ -1,5 +1,6 @@
 import os
 import sys
+from typing import List
 sys.path.append(".")
 import json
 import numpy as np
@@ -10,58 +11,55 @@ from dogapp import config
 from dogapp import predict
 from dogapp import utils
 
-# Title
-st.title("Dog Identification 🐶 App")
-
-# Get run components for prediction
-#url, data, model = predict.get_run_components(payload.inputs[0]['url'])
-
-# Pages
-#page = st.sidebar.selectbox(
-#    "Choose a page", ['Dog Identification 🐶 App', 'Other Apps..'])
-
-st.header("🚀 Try it out!")
-
-text = st.text_input(
-    "Enter dog image url:", value="https://news.nationalgeographic.com/content/dam/news/2018/05/29/dog-baby-talk/01-dog-baby-talk-NationalGeographic_2283205.ngsversion.1527786004161.adapt.1900.1.jpg")
-
-st.image(text, use_column_width=True)
-
-url, data, model = predict.get_run_components(text)
-
-results = predict.predict(url= url,data=data, model=model)
-
-raw_text = results[0]['input_url']
-st.write("**Input url**:", raw_text)
-preprocessed_text = results[0]['class']
-st.write("**Predicted breed**:", preprocessed_text)
-
-st.info("""⚠️This app uses a **Small** web server. Too many request to it can **Overwhelm** it. In that case it will **Restart**. Please allow it to restart to make any further requests.✨""")
-
-# Warning
-#st.info("""⚠️The model architecture used in this demo is **not state-of-the-art** and it's not **fully optimized**, as this was not the main focus of the lesson.
-#        Also keep in mind that the **dataset** is dated and **limited** to particular vocabulary.
-#        If you are interested in generalized text classification or NLP in general, check out these [curated resources](https://madewithml.com/topics/#nlp).""")
-
-# Show raw json
-show_json = st.checkbox("Show complete JSON output:", value=False)
-if show_json:
-    st.json(results)
-    
-#if page == 'Prediction':
-#    pass
-
-    # Input text
-    
-    # Get Run components
+@st.cache
+def get_model_output(text) -> List:
+    """
+    """
+    # Get run components for prediction
+    url, data, model = predict.get_run_components(text)
+    # Get model output
+    output = predict.predict(url= url,data=data, model=model)
+    return output
 
 
-    # Predict
+def main():
+    """
+    """
+    # Application Pages
+    page = st.sidebar.selectbox(
+        "Choose a page", ['Dog Identification 🐶 App', 'Other Apps..'])
+        
+    if page == 'Dog Identification 🐶 App':
+        # Title
+        st.title("Dog Identification 🐶 App")
+        st.header("🚀 Try it out!")
+        
+        # Server warning
+        st.info("""⚠️This app uses a **Small** web server. Too many request to it can **Overwhelm** it. In that case it will **Restart**. Please allow it to restart to make any further requests.✨""")
+        
+        # Input box for image URL
+        text = st.text_input(
+            "Enter dog image url:", value="https://news.nationalgeographic.com/content/dam/news/2018/05/29/dog-baby-talk/01-dog-baby-talk-NationalGeographic_2283205.ngsversion.1527786004161.adapt.1900.1.jpg")
+        
+        # Input image
+        st.image(text, use_column_width=True)
+        
+        # Show results
+        results = get_model_output(text)
+        raw_text = results[0]['input_url']
+        preprocessed_text = results[0]['class']
+        st.write("**Input url**:", raw_text)
+        st.write("**Predicted breed**:", preprocessed_text)
 
-    
-    # Results
-#elif page == 'Model details':
+        # Show raw json
+        show_json = st.checkbox("Show complete JSON output:", value=False)
+        if show_json:
+            st.json(results)
 
-#    st.header("Other Applications")
-    
-#    st.write("More apps coming soon...")
+    elif page == 'Other Apps..':
+
+        st.title("Other Applications")
+        
+        st.write("More apps coming soon...")
+
+main()
