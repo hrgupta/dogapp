@@ -75,19 +75,19 @@ dogapp/
 • Build image
 
 ```
-docker build -t dog-who:latest -f Dockerfile .
+docker build -t dogapp:latest -f Dockerfile .
 ```
 
 • Run container if using `CMD ["python", "app.py"]` or `ENTRYPOINT [ "/bin/sh", "entrypoint.sh"]`
 
 ```
-docker run -p 5000:5000 --name dog-who dog-who:latest
+docker run -p 5000:5000 --name dogapp dogapp:latest
 ```
 
 • Get inside container if using `CMD ["/bin/bash"]`
 
 ```
-docker run -p 5000:5000 -it dog-who /bin/bash
+docker run -p 5000:5000 -it dogapp /bin/bash
 ```
 
 • Other flags
