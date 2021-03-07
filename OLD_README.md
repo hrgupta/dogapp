@@ -1,6 +1,6 @@
 # Dog Identification 🐶 App
 
-🚀 This project was created using the [e2e-ml-app](https://github.com/madewithml/e2e-ml-app-tensorflow) cookiecutter template. Check it out to start creating your own ML applications.
+🚀 This project was created using the [ml-app-template](https://github.com/madewithml/ml-app-template) cookiecutter template. Check it out to start creating your own ML applications.
 
 ## Set up
 
@@ -10,10 +10,16 @@ source venv/bin/activate
 pip install -r requirements.txt [update requirements.txt as needed]
 ```
 
+## Training
+
+```bash
+python dogapp/train.py
+```
+
 ## Inference via scripts
 
 ```bash
-python dogapp/predict.py --url <image-url>
+python dogapp/predict.py
 ```
 
 ## Endpoints
@@ -22,6 +28,40 @@ python dogapp/predict.py --url <image-url>
 uvicorn dogapp.app:app --host 0.0.0.0 --port 5000 --reload
 → http://localhost:5000/docs
 ```
+
+## Inference via API
+
+```python
+import json
+import requests
+
+headers = {
+    'accept': 'application/json',
+    'Content-Type': 'application/json',
+}
+
+data = '''{"experiment_id": "latest",
+           "X": ""}'''
+
+response = requests.post('http://0.0.0.0:5000/predict',
+                         headers=headers, data=data)
+results = json.loads(response.text)
+print (json.dumps(results, indent=2, sort_keys=False))
+```
+
+## TensorBoard
+
+```bash
+tensorboard --logdir tensorboard
+→ http://localhost:6006/
+```
+
+## Tests
+
+```bash
+pytest
+```
+
 ## Docker
 
 1. Build image
@@ -39,11 +79,13 @@ docker run -d -p 5000:5000 -p 6006:6006 --name dog-who dog-who:latest
 ## Directory structure
 
 ```
-dogapp/
+dog-who/
+├── datasets/                           - datasets
 ├── experiments/                        - experiment directories
 ├── logs/                               - directory of log files
 |   ├── errors/                           - error log
 |   └── info/                             - info log
+├── tensorboard/                        - tensorboard logs
 ├── tests/                              - unit tests
 ├── dogapp/
 |   ├── app.py                            - app endpoints
@@ -52,12 +94,9 @@ dogapp/
 |   ├── models.py                         - model architectures
 |   ├── predict.py                        - inference script
 |   ├── train.py                          - training script
-|   ├── utils.py                          - load embeddings
-|   ├── dog_names.txt                     - contains dog names
-|   └── weights.bext.Xception.hdf5        - learned weights of Xception model
+|   └── utils.py                          - load embeddings
 ├── .dockerignore                       - files to ignore on docker
 ├── .gitignore                          - files to ignore on git
-├── .slugignore                         - files to ignore on slug
 ├── CODE_OF_CONDUCT.md                  - code of conduct
 ├── CODEOWNERS                          - code owner assignments
 ├── config.py                           - configuration
@@ -66,8 +105,13 @@ dogapp/
 ├── LICENSE                             - license description
 ├── logging.json                        - logger configuration
 ├── README.md                           - this README
-├── setup.sh                            - setup file
 └── requirements.txt                    - requirements
+```
+
+## Overfit to small subset
+
+```
+python dog-who/train.py --overfit
 ```
 
 ## Helpful docker commands
