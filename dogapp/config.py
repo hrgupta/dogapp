@@ -17,4 +17,4 @@ utils.create_dirs(EXPERIMENTS_DIR)
 log_config = utils.load_json(
     filepath=os.path.join(BASE_DIR, 'logging.json'))
 logging.config.dictConfig(log_config)
-logger = logging.getLogger('logger')
+logger = logging.getLogger('infologger')

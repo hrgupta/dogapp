@@ -33,11 +33,17 @@
         }
     },
     "loggers": {
-        "logger": {
+        "infologger": {
             "level": "DEBUG",
             "handlers": [
                 "console",
-                "info_file_handler",
+                "info_file_handler"
+            ],
+            "propagate": false
+        },
+        "errorlogger": {
+            "level": "ERROR",
+            "handlers": [
                 "error_file_handler"
             ],
             "propagate": false
