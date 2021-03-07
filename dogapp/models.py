@@ -1,14 +1,13 @@
 # models.py - define model architectures.
 import tensorflow as tf
 from tensorflow import keras
-from tensorflow.keras.layers import Input
-from tensorflow.keras.layers import GlobalAveragePooling2D
-from tensorflow.keras.layers import Dense
+from tensorflow.keras.layers import Dense, GlobalAveragePooling2D, Input
 from tensorflow.keras.losses import CategoricalCrossentropy
 from tensorflow.keras.metrics import Accuracy
 from tensorflow.keras.models import Model
 from tensorflow.keras.optimizers import Adam
 from tensorflow.keras.utils import plot_model
+
 
 class DogCNN(keras.Model):
     def __init__(self):
