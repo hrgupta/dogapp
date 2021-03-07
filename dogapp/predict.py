@@ -1,48 +1,19 @@
 # predict.py - predict (infer) inputs (single/batch).
 import os
 import sys
+
+sys.path.append(".")  # necessary to run predict.py from command line *magic line*
 import collections
 import json
-import urllib.request
-import numpy as np
-
-from tensorflow.keras.preprocessing.text import tokenizer_from_json
+from argparse import ArgumentParser, Namespace
 from io import BytesIO
-from tensorflow.keras.preprocessing import image
 
-from argparse import ArgumentParser
-from argparse import Namespace
+import numpy as np
+from tensorflow.keras.preprocessing.text import tokenizer_from_json
 
-from dogapp import config
-from dogapp import utils
-from dogapp import data
-from dogapp import models
+from dogapp import config, data, models, utils
 
 sys.path.append(".")
-
-
-def get_run_components(url):
-
-    # Load model
-    model = models.DogCNN()
-    model.summary(input_shape=(7, 7, 2048))  # build it
-    model_path = os.path.join(os.getcwd(), "dogapp/weights.best.Xception.hdf5")
-    model.load_weights(model_path)
-    data = loadImage(url)
-
-    return url, data, model
-
-
-def loadImage(URL):
-    with urllib.request.urlopen(URL) as url:
-        with open("idata.jpg", "wb") as f:
-            f.write(url.read())
-
-    img_path = "idata.jpg"
-    img = image.load_img(img_path, target_size=(224, 224))
-    os.remove(img_path)
-    x = image.img_to_array(img)
-    return np.expand_dims(x, axis=0)
 
 
 def predict(url, data, model):
@@ -76,8 +47,14 @@ if __name__ == "__main__":
     inputs = [{"url": args.url}]
 
     # Get run components for prediction
-    url, data, model = get_run_components(inputs[0]["url"])
+    model = models.DogCNN()
+    model.summary(input_shape=(7, 7, 2048))  # build it
+    model_path = os.path.join(os.getcwd(), "dogapp/weights.best.Xception.hdf5")
+    model.load_weights(model_path)
+    data = utils.loadImage(inputs[0]["url"])
 
     # Predict
-    results = predict(url=url, data=data, model=model)
-    config.logger.info(json.dumps(results, indent=4, sort_keys=False))
+    prediction = []
+    prediction.append(predict(url=inputs[0]["url"], data=data, model=model)[0])
+
+    config.logger.info(json.dumps(prediction, indent=4, sort_keys=False))
