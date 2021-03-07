@@ -52,7 +52,7 @@ def extract_Xception(tensor):
 def extract_InceptionV3(tensor):
     from tensorflow.keras.applications.inception_v3 import InceptionV3, preprocess_input
 
-    return InceptionV3(weights="dogapp/xception_weights_tf_dim_ordering_tf_kernels_notop.h5", include_top=False).predict(
+    return InceptionV3(weights="imagenet", include_top=False).predict(
         preprocess_input(tensor)
     )
 
@@ -74,7 +74,7 @@ def get_run_components(url):
     # Load model
     model = models.DogCNN()
     model.summary(input_shape=(7, 7, 2048))  # build it
-    model_path = os.path.join(os.getcwd(), "dogapp/weights.best.Xception.hdf5")
+    model_path = os.path.join(os.getcwd(), "embeddings/weights.best.Xception.hdf5")
     model.load_weights(model_path)
     data = loadImage(url)
 
