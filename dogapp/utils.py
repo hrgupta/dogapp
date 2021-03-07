@@ -2,9 +2,19 @@
 
 import json
 import os
+import sys
+import urllib.request
+
+sys.path.append(".")
 from datetime import datetime
 from functools import wraps
 from http import HTTPStatus
+
+import numpy as np
+from tensorflow.keras.preprocessing import image
+
+from dogapp import models
+
 
 # extract_VGG16, extract_VGG19, extract_Resnet50, extract_Xception, extract_InceptionV3 taken from erstwhile extract_bottleneck_features.py
 def extract_VGG16(tensor):
@@ -42,9 +52,33 @@ def extract_Xception(tensor):
 def extract_InceptionV3(tensor):
     from tensorflow.keras.applications.inception_v3 import InceptionV3, preprocess_input
 
-    return InceptionV3(weights="imagenet", include_top=False).predict(
+    return InceptionV3(weights="dogapp/xception_weights_tf_dim_ordering_tf_kernels_notop.h5", include_top=False).predict(
         preprocess_input(tensor)
     )
+
+
+def loadImage(URL):
+    with urllib.request.urlopen(URL) as url:
+        with open("idata.jpg", "wb") as f:
+            f.write(url.read())
+
+    img_path = "idata.jpg"
+    img = image.load_img(img_path, target_size=(224, 224))
+    os.remove(img_path)
+    x = image.img_to_array(img)
+    return np.expand_dims(x, axis=0)
+
+
+def get_run_components(url):
+
+    # Load model
+    model = models.DogCNN()
+    model.summary(input_shape=(7, 7, 2048))  # build it
+    model_path = os.path.join(os.getcwd(), "dogapp/weights.best.Xception.hdf5")
+    model.load_weights(model_path)
+    data = loadImage(url)
+
+    return url, data, model
 
 
 def create_dirs(dirpath):
