@@ -49,7 +49,7 @@ if __name__ == "__main__":
     # Get run components for prediction
     model = models.DogCNN()
     model.summary(input_shape=(7, 7, 2048))  # build it
-    model_path = os.path.join(os.getcwd(), "dogapp/weights.best.Xception.hdf5")
+    model_path = os.path.join(os.getcwd(), "embeddings/weights.best.Xception.hdf5")
     model.load_weights(model_path)
     data = utils.loadImage(inputs[0]["url"])
 
