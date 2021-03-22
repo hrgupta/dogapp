@@ -1,4 +1,4 @@
-FROM python:3.6-slim
+FROM python:3.7
 
 # Install dependencies
 # Do this first for caching
@@ -6,9 +6,7 @@ COPY requirements.txt requirements.txt
 RUN pip install -r requirements.txt
 
 # Copy
-COPY experiments experiments
-COPY dogapp dogapp
-COPY logging.json logging.json
+COPY . .
 
 # Export ports
 EXPOSE 5000
