@@ -27,13 +27,13 @@ uvicorn dogapp.app:app --host 0.0.0.0 --port 5000 --reload
 1. Build image
 
 ```bash
-docker build -t dog-who:latest -f Dockerfile .
+docker build -t dogapp:latest -f Dockerfile .
 ```
 
 2. Run container
 
 ```bash
-docker run -d -p 5000:5000 -p 6006:6006 --name dog-who dog-who:latest
+docker run -d -p 5000:5000 -p 6006:6006 --name dogapp dogapp:latest
 ```
 
 ## Directory structure
