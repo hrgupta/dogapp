@@ -110,10 +110,10 @@ def construct_response(f):
         # Construct response
         response = {
             "message": results["message"],
-            "method": request.method,
+            "method": urllib.request.request.method,
             "status-code": results["status-code"],
             "timestamp": datetime.now().isoformat(),
-            "url": request.url,
+            "url": urllib.request.request.url,
         }
 
         # Add data
