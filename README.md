@@ -27,13 +27,13 @@ uvicorn dogapp.app:app --host 0.0.0.0 --port 5000 --reload
 1. Build image
 
 ```bash
-docker build -t dog-who:latest -f Dockerfile .
+docker build -t dogapp:latest -f Dockerfile .
 ```
 
 2. Run container
 
 ```bash
-docker run -d -p 5000:5000 -p 6006:6006 --name dog-who dog-who:latest
+docker run -d -p 5000:5000 -p 6006:6006 --name dogapp dogapp:latest
 ```
 
 ## Directory structure
@@ -75,19 +75,19 @@ dogapp/
 • Build image
 
 ```
-docker build -t dog-who:latest -f Dockerfile .
+docker build -t dogapp:latest -f Dockerfile .
 ```
 
 • Run container if using `CMD ["python", "app.py"]` or `ENTRYPOINT [ "/bin/sh", "entrypoint.sh"]`
 
 ```
-docker run -p 5000:5000 --name dog-who dog-who:latest
+docker run -p 5000:5000 --name dogapp dogapp:latest
 ```
 
 • Get inside container if using `CMD ["/bin/bash"]`
 
 ```
-docker run -p 5000:5000 -it dog-who /bin/bash
+docker run -p 5000:5000 -it dogapp /bin/bash
 ```
 
 • Other flags
