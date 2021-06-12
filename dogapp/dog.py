@@ -9,7 +9,7 @@ import numpy as np
 import requests
 import streamlit as st
 
-from dogapp import config, predict, utils
+from dogapp import dogconfig, predict, utils
 
 
 @st.cache
