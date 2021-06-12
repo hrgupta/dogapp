@@ -11,7 +11,7 @@ from fastapi import FastAPI, Path
 from fastapi.responses import RedirectResponse
 from pydantic import BaseModel
 
-from dogapp import config, predict, models, utils
+from dogapp import dogconfig, predict, models, utils
 
 app = FastAPI(
     title="Dog Identification App",
@@ -28,7 +28,7 @@ async def _index():
         "status-code": HTTPStatus.OK,
         "data": {},
     }
-    config.logger.info(json.dumps(response, indent=2))
+    dogconfig.logger.info(json.dumps(response, indent=2))
     return response
 
 
@@ -57,7 +57,7 @@ async def _predict(payload: PredictPayload):
                 "status-code": HTTPStatus.OK,
                 "data": {"prediction": prediction},
             }
-            config.logging.getLogger('infologger').info(json.dumps(response, indent=2))
+            dogconfig.logging.getLogger('infologger').info(json.dumps(response, indent=2))
         except Exception as pe:
-            config.logging.getLogger('errorlogger').error("Error making predictions", exc_info=pe)
+            dogconfig.logging.getLogger('errorlogger').error("Error making predictions", exc_info=pe)
     return response

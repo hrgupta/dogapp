@@ -11,7 +11,7 @@ from io import BytesIO
 import numpy as np
 from tensorflow.keras.preprocessing.text import tokenizer_from_json
 
-from dogapp import config, data, models, utils
+from dogapp import dogconfig, data, models, utils
 
 sys.path.append(".")
 
@@ -57,4 +57,4 @@ if __name__ == "__main__":
     prediction = []
     prediction.append(predict(url=inputs[0]["url"], data=data, model=model)[0])
 
-    config.logger.info(json.dumps(prediction, indent=4, sort_keys=False))
+    dogconfig.logger.info(json.dumps(prediction, indent=4, sort_keys=False))
