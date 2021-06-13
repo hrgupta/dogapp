@@ -1,14 +1,12 @@
-import http
-import os
 import sys
 from typing import Dict
 
 sys.path.append(".")
 import json
 
-import numpy as np
 import requests
 import streamlit as st
+
 
 @st.cache
 def get_model_output(text) -> Dict:
