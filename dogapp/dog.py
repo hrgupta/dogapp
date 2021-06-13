@@ -1,6 +1,7 @@
+import http
 import os
 import sys
-from typing import List
+from typing import Dict
 
 sys.path.append(".")
 import json
@@ -9,16 +10,13 @@ import numpy as np
 import requests
 import streamlit as st
 
-from dogapp import dogconfig, predict, utils
-
-
 @st.cache
-def get_model_output(text) -> List:
+def get_model_output(text) -> Dict:
     """"""
-    # Get run components for prediction
-    url, data, model = utils.get_run_components(text)
     # Get model output
-    output = predict.predict(url=url, data=data, model=model)
+    # output = predict.predict(url=url, data=data, model=model)
+    body = {"urls": [text]}
+    output = json.loads(requests.post("http://localhost:5000/predict", json=body).text)
     return output
 
 
@@ -50,8 +48,8 @@ def main():
 
         # Show results
         results = get_model_output(text)
-        raw_text = results[0]["input_url"]
-        preprocessed_text = results[0]["class"]
+        raw_text = results["data"]["prediction"][0]["input_url"]
+        preprocessed_text = results["data"]["prediction"][0]["class"]
         st.write("**Input url**:", raw_text)
         st.write("**Predicted breed**:", preprocessed_text)
 
