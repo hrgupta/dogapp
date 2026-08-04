@@ -1,17 +1,16 @@
 # models.py - define model architectures.
-import tensorflow as tf
-from tensorflow import keras
-from tensorflow.keras.layers import Dense, GlobalAveragePooling2D, Input
-from tensorflow.keras.losses import CategoricalCrossentropy
-from tensorflow.keras.metrics import Accuracy
-from tensorflow.keras.models import Model
-from tensorflow.keras.optimizers import Adam
+import keras
+from keras.layers import Dense, GlobalAveragePooling2D, Input
+from keras.losses import CategoricalCrossentropy
+from keras.metrics import Accuracy
+from keras.models import Model
+from keras.optimizers import Adam
 
 
 class DogCNN(keras.Model):
     def __init__(self):
         super(DogCNN, self).__init__(name="cnn")
-        self.gap = GlobalAveragePooling2D(input_shape='2048')
+        self.gap = GlobalAveragePooling2D()
         self.fc1 = Dense(133, activation='softmax')
 
     def call(self, inputs, training=False):
