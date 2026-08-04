@@ -9,7 +9,6 @@ from argparse import ArgumentParser, Namespace
 from io import BytesIO
 
 import numpy as np
-from tensorflow.keras.preprocessing.text import tokenizer_from_json
 
 from dogapp import dogconfig, data, models, utils
 

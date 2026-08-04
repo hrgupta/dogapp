@@ -1,8 +1,6 @@
 import os
 import sys
 
-from numpy.lib import utils
-
 sys.path.append(".")
 import json
 from http import HTTPStatus
