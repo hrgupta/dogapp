@@ -1,9 +1,11 @@
-FROM python:3.7-buster
+FROM python:3.14-slim
 
-# Install dependencies
-# Do this first for caching
-RUN apt-get update
-RUN apt-get -y install supervisor
+# Modernized stack: Keras 3 on the PyTorch backend.
+# (TensorFlow has no Python 3.14 wheels, so tf.keras is gone.)
+ENV KERAS_BACKEND=torch
+
+# Install dependencies (modernized for Python 3.14 — see requirements.txt)
+RUN apt-get update && apt-get -y install supervisor
 COPY requirements.txt requirements.txt
 RUN pip install -r requirements.txt
 
@@ -11,11 +13,8 @@ RUN pip install -r requirements.txt
 COPY . .
 
 # Export ports
-EXPOSE 8501
-EXPOSE 8502
 EXPOSE 5000
+EXPOSE 8501
 
-# Start app
-#CMD ["uvicorn", "dogapp.app:app", "--host", "0.0.0.0", "--port", "5000"]
-#CMD ["sh", "-c","streamlit run dogapp/dog.py"]
-CMD /usr/bin/supervisord -c /supervisor/service_script.conf
+# Start FastAPI + Streamlit via supervisord
+CMD ["/usr/bin/supervisord", "-c", "/supervisor/service_script.conf"]
