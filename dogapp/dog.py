@@ -8,13 +8,13 @@ import requests
 import streamlit as st
 
 
-@st.cache
+@st.cache_data
 def get_model_output(text) -> Dict:
     """"""
     # Get model output
     # output = predict.predict(url=url, data=data, model=model)
     body = {"urls": [text]}
-    output = json.loads(requests.post("http://localhost:5000/predict", json=body).text)
+    output = json.loads(requests.post("http://127.0.0.1:5000/predict", json=body).text)
     return output
 
 
@@ -42,7 +42,7 @@ def main():
         )
 
         # Input image
-        st.image(text, use_column_width=True)
+        st.image(text, use_container_width=True)
 
         # Show results
         results = get_model_output(text)
@@ -63,4 +63,5 @@ def main():
         st.write("More apps coming soon...")
 
 
-main()
+if __name__ == "__main__":
+    main()
