@@ -59,11 +59,43 @@ docker run -d -p 8000:5000 -p 8502:8501 --name dogapp dogapp:latest
 ## Directory structure
 
 ```
-dogapp/          app endpoints (app.py), config, model (models.py),
-                 inference (predict.py), utilities (utils.py),
-                 dog_names.txt, embeddings/
-tests/           API + Streamlit tests
-.github/workflows/  CI (Python 3.14 · flake8 + pytest)
+dogapp/
+├── .dockerignore                        - files to ignore on docker
+├── .github/
+│   └── workflows/
+│       └── python-app.yml               - CI workflow (Python 3.14, flake8 + pytest)
+├── .gitignore                           - files to ignore on git
+├── .slugignore                          - files to ignore on slug
+├── CODEOWNERS                           - code owner assignments
+├── CODE_OF_CONDUCT.md                   - code of conduct
+├── CONTRIBUTING.md                      - contributing guidelines
+├── Dockerfile                           - dockerfile to containerize app
+├── LICENSE                              - license description
+├── OLD_README.md                        - original README (pre-modernization)
+├── README.md                            - this README
+├── dogapp/
+│   ├── __init__.py                      - package init
+│   ├── app.py                           - FastAPI app endpoints
+│   ├── data.py                          - data processing
+│   ├── dog.py                           - Streamlit UI
+│   ├── dog_names.txt                    - contains dog breed names
+│   ├── dogconfig.py                     - configuration + logging
+│   ├── models.py                        - model architecture (Keras 3)
+│   ├── predict.py                       - inference script
+│   ├── train.py                         - training script
+│   └── utils.py                         - utilities (image loading, embeddings)
+├── embeddings/
+│   └── weights.best.Xception.hdf5       - learned weights of the Xception head
+├── keep.sh                              - helper script
+├── logging.json                         - logger configuration
+├── requirements.txt                     - Python dependencies
+├── setup.sh                             - setup file
+├── supervisor/
+│   └── service_script.conf              - supervisord config (API + Streamlit)
+└── tests/
+    ├── __init__.py                      - package init
+    ├── test_api.py                      - FastAPI endpoint tests
+    └── test_streamlit.py                - Streamlit UI tests
 ```
 
 ## CI
