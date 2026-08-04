@@ -1,106 +1,103 @@
 # Dog Identification 🐶 App
 
-🚀 This project was created using the [e2e-ml-app](https://github.com/madewithml/e2e-ml-app-tensorflow) cookiecutter template. Check it out to start creating your own ML applications.
+Web app that detects dog breeds from image URLs — FastAPI backend + Streamlit UI, plus a CLI for one-off predictions.
+
+> **Modernized in 2026:** originally built on TensorFlow 2.2 / Python 3.7 (2020), which is no longer installable. Now runs on **Python 3.14 with Keras 3 on the PyTorch backend** — TensorFlow publishes no Python 3.14 wheels.
+
+## Stack
+
+- **Python 3.14** · **Keras 3 (PyTorch backend)** · FastAPI · Streamlit · Docker
+- Model: Xception bottleneck features → 133-breed classification head (`embeddings/weights.best.Xception.hdf5`)
 
 ## Set up
 
-```
-virtualenv -p python3 venv
-source venv/bin/activate
-pip install -r requirements.txt [update requirements.txt as needed]
-```
-
-## Inference via scripts
+Requires [uv](https://docs.astral.sh/uv/) (or any Python 3.14 interpreter):
 
 ```bash
-python dogapp/predict.py --url <image-url>
+uv venv --python 3.14 venv
+uv pip install -r requirements.txt
 ```
 
-## Endpoints
+> Run app commands with `KERAS_BACKEND=torch` in the environment. The first inference downloads the Xception ImageNet weights (~85 MB).
+
+## Inference via CLI
 
 ```bash
-uvicorn dogapp.app:app --host 0.0.0.0 --port 5000 --reload
-→ http://localhost:5000/docs
+KERAS_BACKEND=torch venv/bin/python dogapp/predict.py --url <image-url>
 ```
+
+## Run the API
+
+```bash
+KERAS_BACKEND=torch venv/bin/uvicorn dogapp.app:app --host 127.0.0.1 --port 5000
+→ http://127.0.0.1:5000/docs
+```
+
+> **macOS note:** use `127.0.0.1`, not `localhost` — macOS AirPlay Receiver squats port 5000 and answers `localhost`/`::1` requests with a denial.
+
+## Run the Streamlit UI
+
+```bash
+venv/bin/streamlit run dogapp/dog.py
+→ http://localhost:8501
+```
+
+## Tests
+
+```bash
+KERAS_BACKEND=torch venv/bin/python -m pytest
+```
+
 ## Docker
 
-1. Build image
-
 ```bash
-docker build -t dogapp:latest -f Dockerfile .
-```
-
-2. Run container
-
-```bash
-docker run -d -p 5000:5000 -p 6006:6006 --name dogapp dogapp:latest
+docker build -t dogapp:latest .
+docker run -d -p 8000:5000 -p 8502:8501 --name dogapp dogapp:latest
+→ API: http://127.0.0.1:8000 · UI: http://127.0.0.1:8502
 ```
 
 ## Directory structure
 
 ```
 dogapp/
-├── experiments/                        - experiment directories
-├── logs/                               - directory of log files
-|   ├── errors/                           - error log
-|   └── info/                             - info log
-├── tests/                              - unit tests
+├── .dockerignore                        - files to ignore on docker
+├── .github/
+│   └── workflows/
+│       └── python-app.yml               - CI workflow (Python 3.14, flake8 + pytest)
+├── .gitignore                           - files to ignore on git
+├── .slugignore                          - files to ignore on slug
+├── CODEOWNERS                           - code owner assignments
+├── CODE_OF_CONDUCT.md                   - code of conduct
+├── CONTRIBUTING.md                      - contributing guidelines
+├── Dockerfile                           - dockerfile to containerize app
+├── LICENSE                              - license description
+├── OLD_README.md                        - original README (pre-modernization)
+├── README.md                            - this README
 ├── dogapp/
-|   ├── app.py                            - app endpoints
-|   ├── config.py                         - configuration
-|   ├── data.py                           - data processing
-|   ├── models.py                         - model architectures
-|   ├── predict.py                        - inference script
-|   ├── train.py                          - training script
-|   ├── utils.py                          - load embeddings
-|   ├── dog_names.txt                     - contains dog names
-|   └── weights.bext.Xception.hdf5        - learned weights of Xception model
-├── .dockerignore                       - files to ignore on docker
-├── .gitignore                          - files to ignore on git
-├── .slugignore                         - files to ignore on slug
-├── CODE_OF_CONDUCT.md                  - code of conduct
-├── CODEOWNERS                          - code owner assignments
-├── config.py                           - configuration
-├── CONTRIBUTING.md                     - contributing guidelines
-├── Dockerfile                          - dockerfile to containerize app
-├── LICENSE                             - license description
-├── logging.json                        - logger configuration
-├── README.md                           - this README
-├── setup.sh                            - setup file
-└── requirements.txt                    - requirements
+│   ├── __init__.py                      - package init
+│   ├── app.py                           - FastAPI app endpoints
+│   ├── data.py                          - data processing
+│   ├── dog.py                           - Streamlit UI
+│   ├── dog_names.txt                    - contains dog breed names
+│   ├── dogconfig.py                     - configuration + logging
+│   ├── models.py                        - model architecture (Keras 3)
+│   ├── predict.py                       - inference script
+│   ├── train.py                         - training script
+│   └── utils.py                         - utilities (image loading, embeddings)
+├── embeddings/
+│   └── weights.best.Xception.hdf5       - learned weights of the Xception head
+├── keep.sh                              - helper script
+├── logging.json                         - logger configuration
+├── requirements.txt                     - Python dependencies
+├── setup.sh                             - setup file
+├── supervisor/
+│   └── service_script.conf              - supervisord config (API + Streamlit)
+└── tests/
+    ├── __init__.py                      - package init
+    ├── test_api.py                      - FastAPI endpoint tests
+    └── test_streamlit.py                - Streamlit UI tests
 ```
 
-## Helpful docker commands
+## CI
 
-• Build image
-
-```
-docker build -t dogapp:latest -f Dockerfile .
-```
-
-• Run container if using `CMD ["python", "app.py"]` or `ENTRYPOINT [ "/bin/sh", "entrypoint.sh"]`
-
-```
-docker run -p 5000:5000 --name dogapp dogapp:latest
-```
-
-• Get inside container if using `CMD ["/bin/bash"]`
-
-```
-docker run -p 5000:5000 -it dogapp /bin/bash
-```
-
-• Other flags
-
-```
--d: detached
--ti: interative terminal
-```
-
-• Clean up
-
-```
-docker stop $(docker ps -a -q)     # stop all containers
-docker rm $(docker ps -a -q)       # remove all containers
-docker rmi $(docker images -a -q)  # remove all images
-```
+[![DogApp CI](https://github.com/hrgupta/dogapp/actions/workflows/python-app.yml/badge.svg)](https://github.com/hrgupta/dogapp/actions/workflows/python-app.yml)
