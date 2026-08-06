@@ -1,5 +1,7 @@
 # Dog Identification 🐶 App
 
+[![DogApp CI](https://github.com/hrgupta/dogapp/actions/workflows/python-app.yml/badge.svg)](https://github.com/hrgupta/dogapp/actions/workflows/python-app.yml)
+
 Web app that detects dog breeds from image URLs — FastAPI backend + Streamlit UI, plus a CLI for one-off predictions.
 
 > **Modernized in 2026:** originally built on TensorFlow 2.2 / Python 3.7 (2020), which is no longer installable. Now runs on **Python 3.14 with Keras 3 on the PyTorch backend** — TensorFlow publishes no Python 3.14 wheels.
@@ -97,7 +99,3 @@ dogapp/
     ├── test_api.py                      - FastAPI endpoint tests
     └── test_streamlit.py                - Streamlit UI tests
 ```
-
-## CI
-
-[![DogApp CI](https://github.com/hrgupta/dogapp/actions/workflows/python-app.yml/badge.svg)](https://github.com/hrgupta/dogapp/actions/workflows/python-app.yml)
